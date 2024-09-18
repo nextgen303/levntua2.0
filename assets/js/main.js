@@ -68,6 +68,61 @@ window.addEventListener("scroll", function () {
   }
 });
 
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const leftColumn = document.querySelector('.left_column');
+  const rightColumn = document.querySelector('.right_column');
+
+  let scrollSpeed = 1; // Adjust the speed here
+
+  // Function to create an infinite loop by cloning items
+  function infiniteScroll(container, direction) {
+    const items = container.children;
+    const containerHeight = container.offsetHeight;
+
+    let offset = 0;
+
+    function scroll() {
+      if (direction === 'up') {
+        offset -= scrollSpeed;
+        if (offset <= -items[0].offsetHeight) {
+          container.appendChild(items[0]); // Move first element to the end
+          offset = 0;
+        }
+      } else if (direction === 'down') {
+        offset += scrollSpeed;
+        if (offset >= items[0].offsetHeight) {
+          container.appendChild(items[0]); // Move first element to the end
+          offset = 0;
+        }
+      }
+      container.style.transform = `translateY(${offset}px)`;
+      requestAnimationFrame(scroll);
+    }
+
+    scroll();
+  }
+
+  // Start scrolling: left goes up, right goes down
+  infiniteScroll(leftColumn, 'up');
+  infiniteScroll(rightColumn, 'down');
+
+  // Pause scrolling on hover
+  const pauseScrolling = () => scrollSpeed = 0;
+  const resumeScrolling = () => scrollSpeed = 1;
+
+  leftColumn.addEventListener('mouseover', pauseScrolling);
+  leftColumn.addEventListener('mouseout', resumeScrolling);
+
+  rightColumn.addEventListener('mouseover', pauseScrolling);
+  rightColumn.addEventListener('mouseout', resumeScrolling);
+});
+
+
+
 /*=============== Slider ===============*/
 
 document.addEventListener("DOMContentLoaded", function () {
